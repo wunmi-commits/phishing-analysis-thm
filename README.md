@@ -2,10 +2,10 @@
 
 Hands-on investigation of a phishing email impersonating Netflix, analyzing the header artifacts, malicious PDF/Excel attachments, and mapping the execution chain to MITRE ATT&CK. 
 
-## 🎯 Objective
+##  Objective
 Document the investigation workflow for a multi-stage phishing attack, extract actionable Indicators of Compromise (IOCs), and identify detection opportunities for SOC alert triage.
 
-## 🔍 1. Email Header Analysis
+##  1. Email Header Analysis
 Static analysis of the email source to identify sender reputation and spoofing indicators.
 
 *   **Intended Recipient:** `redacted@yahoo.com`
@@ -14,12 +14,12 @@ Static analysis of the email source to identify sender reputation and spoofing i
 *   **Authentication Results:** SPF (`none`), DKIM (`unknown`), DMARC (`unknown`)
 *   **Spoofing Tactic:** Lookalike domain `gogolecloud[.]com` used in the `header.from` field (typosquatting `googlecloud.com`).
 
-## 🎣 2. The Lure (Initial Access)
+##  2. The Lure (Initial Access)
 *   **Action:** User is prompted to click an "UPDATE ACCOUNT NOW" button.
 *   **Shortened URL:** `hxxps://t[.]co/yuxfZm8KPg?amp=1`
 *   **Sandbox Verdict:** Flagged as Suspicious Activity by ANY.RUN.
 
-## 💣 3. Payload Execution Chain
+##  3. Payload Execution Chain
 The attack uses a dual-stage payload delivery, transitioning from a PDF lure to an Excel exploit.
 
 ### Stage 1: PDF Dropper
@@ -36,7 +36,7 @@ The attack uses a dual-stage payload delivery, transitioning from a PDF lure to 
 *   **C2 Domain:** `biz9holdings[.]com`
 *   **IDS Alert:** `ET INFO Suspicious GET Request with Possible COVID-19 URI M1`
 
-## 🧬 4. MITRE ATT&CK Mapping
+## 4. MITRE ATT&CK Mapping
 | Technique | ID |
 | :--- | :--- |
 | Phishing: Spearphishing Attachment | T1566.001 |
@@ -44,13 +44,13 @@ The attack uses a dual-stage payload delivery, transitioning from a PDF lure to 
 | Exploitation for Client Execution | T1203 |
 | Command and Scripting Interpreter | T1059 |
 
-## 🛡️ 5. Detection Opportunities
+##  5. Detection Opportunities
 *   **Email Gateway:** Alert on SPF/DKIM/DMARC failures, specifically targeting `etekno[.]xyz` and `gogolecloud[.]com`.
 *   **Endpoint (Sysmon):** Monitor for the spawning of `EQNEDT32.EXE` by Microsoft Office applications (Excel/Word). 
 *   **Network (IDS/IPS):** Alert on traffic to `biz9holdings[.]com` and `lihi1[.]com`. 
 *   **Mitigation:** Disable the Microsoft Equation Editor via registry keys or Group Policy across the enterprise.
 
-## 📁 6. Indicators of Compromise (IOCs)
+##  6. Indicators of Compromise (IOCs)
 *Note: IOCs are defanged for safe sharing.*
 
 ```csv
